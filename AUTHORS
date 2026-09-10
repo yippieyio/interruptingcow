@@ -1,0 +1,22 @@
+InterruptingCow — authors and contributors
+==========================================
+
+This file credits the people who have contributed to InterruptingCow.
+
+Once the project has a git history of substance, this file will be superseded by
+a generated contributor list (from `git shortlog -sne` and/or the GitHub
+contributors graph). Until then it is maintained by hand.
+
+Project founder and current maintainer:
+
+  pepper  <TODO: contact>
+
+Contributors (alphabetical):
+
+  (none yet)
+
+If you have contributed and are not listed, that is a bug — please open a pull
+request adding yourself, or let a maintainer know.
+
+Contributions are made under the Developer Certificate of Origin; see
+CONTRIBUTING.md. The project is licensed under AGPL-3.0-or-later; see LICENSE.

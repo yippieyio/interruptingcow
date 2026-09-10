@@ -1,0 +1,15 @@
+# Normalize line endings to LF on checkin; check out as-is.
+* text=auto eol=lf
+
+# Explicitly binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Linguist / diff hints
+*.md   linguist-detectable=true
+docs/** linguist-documentation
