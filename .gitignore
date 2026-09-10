@@ -24,7 +24,32 @@ test-results/
 .DS_Store
 .idea/
 *.swp
-.vscode/
+
+# VS Code — ignore the whole folder except a few files a project may choose to
+# share (add them explicitly with `git add -f` if/when wanted).
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+# .vscode/settings.json is intentionally NOT un-ignored: it tends to accumulate
+# personal paths and preferences. Un-ignore it here only if the project decides
+# to maintain a shared one.
+.vscode/settings.json
+.history/
+
+# Claude Code — local/personal and secret state stays out; shared project
+# config and team tooling (settings.json, commands/, agents/, skills/) may be
+# committed.
+.claude/settings.local.json
+.claude/*.local.json
+.claude/.credentials.json
+.claude/credentials.json
+.claude/todos/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/projects/
+.claude/history.jsonl
+.claude/ide/
 
 # Logs
 *.log
