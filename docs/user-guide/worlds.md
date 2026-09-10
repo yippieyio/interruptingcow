@@ -6,6 +6,51 @@
 A **world** is one game you connect to: its address, and how InterruptingCow
 should talk to it. You can have as many as you like.
 
+## Before you start: everyone on this instance shares one IP address
+
+InterruptingCow connects to games on your behalf from **the server it runs on**,
+not from your own computer or phone. So every connection InterruptingCow makes —
+yours and every other user's on the same instance — **appears to the game to come
+from the same IP address.**
+
+Most games log the connecting IP address, and many use it to enforce policy. That
+has consequences you should understand before you rely on InterruptingCow for a
+game you care about:
+
+- **Shared alt limits.** A game that limits you to, say, ten alternate characters
+  ("alts") usually counts them per IP address. If you share an instance, that
+  limit is shared. *Example:* Dick and Jane both use Jane's InterruptingCow to
+  play on LimitedMOO, which allows ten alts per person. Jane has four. Dick can
+  now create at most six before the instance is over LimitedMOO's limit — even
+  though Dick and Jane are different people.
+- **Identity conflation.** Staff who see several characters from one address may
+  assume they're one person. Something you tell staff in confidence could be
+  associated with, or revealed to, another user of your instance.
+- **Shared fate on bans.** Site bans are often IP bans. If one user of an
+  instance is banned from a game, the others very likely are too — and if you're
+  banned, so are they.
+
+None of this is the games misbehaving. Limiting by IP address is often the only
+practical way a volunteer-run game can defend itself against ban evasion and
+abuse.
+
+**What to do about it:**
+
+- If any of the above matters to you — you have alts to protect, you value
+  keeping your play compartmentalised, or you can't afford a shared-fate ban —
+  **run your own single-user instance**, or use a traditional client from your
+  own machine for that game.
+- If you share an instance, treat it as you would a shared household connection:
+  coordinate alt counts with the other users, and assume a game's staff may see
+  your characters as linked.
+
+InterruptingCow intends to offer games a *courtesy* mechanism to tell individual
+users of one instance apart (the MU\* equivalent of a web proxy's
+"X-Forwarded-For"), but **games are under no obligation to use it**, and it does
+not exist yet. Until a game supports something like it, everything above applies
+in full. The reasoning is in
+[ADR 0008](../adr/0008-forwarded-user-identity.md).
+
 ## Adding a world
 
 In the MVP, worlds are added for you by your operator (there's no signup, and

@@ -14,6 +14,7 @@ elevator pitch.
 |---|---|
 | [Architecture](architecture.md) | The whole system: components, the Session model, the line pipeline, data model, durability, deployment. **Read this first.** |
 | [Wire protocol](protocol.md) | How the web client and the daemon talk: the WebSocket message set, the REST API, the handshake, versioning. |
+| [Telnet & MU\* protocols](telnet-protocols.md) | Reference: the upstream (game-facing) telnet options and MU\* protocols — what each does, its format, and whether we speak it. |
 | [Glossary](glossary.md) | MU\*, telnet, and project-specific terminology. |
 
 ## Decisions
@@ -63,6 +64,11 @@ elevator pitch.
 | [0005](adr/0005-podman-pod-external-state.md) | Podman pod, state on host volumes | Accepted |
 | [0006](adr/0006-connection-recovery-semantics.md) | Connection-recovery semantics | Accepted |
 | [0007](adr/0007-licensing-and-workflow.md) | Licensing, DCO, and development workflow | Accepted |
+| [0008](adr/0008-forwarded-user-identity.md) | Offer per-user origin information to destinations | Proposed |
 
 _"Accepted" here means "decided as part of the initial design". Any of these can
 be revisited with a superseding ADR._
+
+_ADR 0008 is **Proposed** — open for review. It proposes the capability and the
+seam; the wire transport for the forwarded-identity payload is left to a
+follow-up ADR._

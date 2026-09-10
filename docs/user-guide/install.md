@@ -65,6 +65,15 @@ ban). InterruptingCow will show that world as **disconnected** and wait for you
 to reconnect it; it doesn't automatically reconnect in that case, on purpose.
 See [Managing worlds](worlds.md).
 
+## One thing to know about shared instances
+
+If your operator runs InterruptingCow for more than one person, every user's game
+connections leave the server from **the same IP address**. Games that limit alts
+by IP, or that ban by IP, will apply those limits and bans to your whole instance
+collectively. If that matters for a game you play, read
+[Everyone on this instance shares one IP address](worlds.md#before-you-start-everyone-on-this-instance-shares-one-ip-address)
+before you depend on InterruptingCow for it.
+
 ## Getting the source
 
 InterruptingCow is [free software](../../LICENSE) (AGPL-3.0-or-later). The app has

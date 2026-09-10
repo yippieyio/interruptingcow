@@ -309,7 +309,9 @@ Because the pipeline is the single choke point:
 ### Upstream gateway: transports and telnet
 
 The daemon connects **out** to game servers, which are mostly plaintext telnet
-and sometimes TLS.
+and sometimes TLS. A full reference for the options and MU\* protocols named
+below — what each does, its wire format, and its direction — is in
+[Telnet & MU\* protocols](telnet-protocols.md).
 
 - **`ITransport`** abstracts the socket. Implementations: `PlainTelnetTransport`
   and `TlsTelnetTransport`. Per-world config chooses.
@@ -329,6 +331,22 @@ and sometimes TLS.
 Untrusted data from a game server is treated as hostile input: the state machine
 must not be crashable by malformed IAC sequences, over-long lines, or partial
 negotiations.
+
+#### Forwarded user identity (stub)
+
+Because the daemon is shared, every world connection reaches a destination from
+**one IP address**, so a destination that limits alts or bans by IP treats all of
+an instance's users as one person. An **`IForwardedIdentity`** seam lets the
+upstream gateway present a per-user, pseudonymous origin payload to a
+destination — the MU\* analogue of a web proxy's `X-Forwarded-For` /
+`Forwarded` — as a courtesy a destination *may* use to tell instance users apart.
+The MVP ships a **no-op implementation** that sends nothing; the payload is
+privacy-preserving by default (a stable per-user token and the instance identity,
+**not** the user's real IP), with real-IP forwarding an opt-in. The **wire
+transport is deliberately unspecified** pending investigation of an existing
+carrier (a GMCP package, a registered option, an MSSP-like exchange) versus a
+minimal dedicated one. See [ADR 0008](adr/0008-forwarded-user-identity.md) and
+the user guide's [shared-IP note](user-guide/worlds.md#before-you-start-everyone-on-this-instance-shares-one-ip-address).
 
 ### Recovery: our-fault only
 
@@ -604,6 +622,7 @@ InterruptingCow/
 | Push notifications | Must be gated on triggers to be usable | `INotifier`, invoked by `notify` actions |
 | Zero-knowledge log encryption | Significant crypto + UX design; needs the plaintext path working first | log writer / repository branch; `lines_enc` table planned |
 | Inbound terminal (TLS or SSH) | Plaintext telnet in is unacceptable; a secure gateway is real work | `ITerminalGateway`, `NullTerminalGateway` |
+| Forwarded per-user identity to destinations | Shared instances share one source IP; a carrier needs investigation and destination buy-in | `IForwardedIdentity`, no-op default; see [ADR 0008](adr/0008-forwarded-user-identity.md) |
 | MCCP2 / GMCP / MXP / MSSP | Not needed for basic play; each is self-contained | one stub module per option in the telnet layer |
 | Self-serve registration / multi-tenant | Out of the supported scope; much more infrastructure | admin CLI is the only account path today |
 | Automated deployment | Manual pull is fine at this scale | deploy config is a normal artifact |

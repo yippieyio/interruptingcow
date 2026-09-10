@@ -48,6 +48,9 @@ lineage, the telnet layer, and the project's own vocabulary.
 
 ## Telnet and the wire
 
+_Fuller treatment — wire formats, option numbers, directions, and which we
+speak — in [Telnet & MU\* protocols](telnet-protocols.md)._
+
 **Telnet**
 : The 1970s terminal protocol most MU\* servers still speak. In practice a MU\*
   connection is a mostly-plaintext TCP stream with occasional telnet
@@ -71,8 +74,13 @@ lineage, the telnet layer, and the project's own vocabulary.
   InterruptingCow answers this from the web client's reported dimensions.
 
 **TTYPE** / **MTTS** (Terminal Type / Mud Terminal Type Standard)
-: Telnet option `24`. The client identifies its terminal type; MTTS extends this
-  with a capability bitmask (ANSI, UTF-8, 256 colour, etc.).
+: Telnet option `24` (RFC 1091). The server repeatedly sends `SEND`; the client
+  answers `IS` with, in order, its **client name**, a **terminal type**, then
+  `MTTS <bitmask>`. The MTTS bitmask advertises capabilities: `1` ANSI, `2`
+  VT100, `4` UTF-8, `8` 256-colour, `16` mouse, `32` OSC palette, `64` screen
+  reader, **`128` proxy**, `256` truecolour, `512` MNES, `1024` MSLP, `2048`
+  TLS. Bit `128` ("proxy") is how a client like InterruptingCow signals that it
+  is not the end user's own machine.
 
 **EOR** (End Of Record, option `25`) / **GA** (Go Ahead)
 : Markers a server can send to delimit a **prompt** from a normal line, so a
@@ -104,8 +112,26 @@ lineage, the telnet layer, and the project's own vocabulary.
   stubbed.*
 
 **MSSP** (MUD Server Status Protocol)
-: Lets a server advertise metadata (name, player count, uptime). *Planned;
-  stubbed.*
+: Telnet option `70`. Lets a server advertise metadata (name, player count,
+  uptime) to crawlers and clients. Server→client only. *Planned; stubbed.*
+
+**MSDP** (Mud Server Data Protocol)
+: Telnet option `69`. A binary key/value (and nested table/array) channel for
+  out-of-band data, similar in purpose to GMCP but not JSON. Bidirectional: a
+  client can `REPORT`/`SEND` to ask for variables. Not currently planned for
+  InterruptingCow.
+
+**NEW-ENVIRON** (RFC 1572)
+: Telnet option `39`. Exchanges named environment variables between client and
+  server, with a `VAR` type for well-known names and a `USERVAR` type for
+  custom ones. The server sends `SEND`, the client replies `IS`.
+
+**MNES** (Mud New Environment Standard)
+: A MU\* convention layered on NEW-ENVIRON. Defines variables including
+  `CLIENT_NAME`, `CLIENT_VERSION`, `CHARSET`, and notably **`IPADDRESS`**, whose
+  documented purpose is to let a **proxy report the real client IP** so a
+  destination can ban an individual rather than the whole proxy. The leading
+  candidate carrier for InterruptingCow's [forwarded identity](#forwarded-identity).
 
 ## Project vocabulary
 
@@ -180,6 +206,26 @@ lineage, the telnet layer, and the project's own vocabulary.
   rather than the web client — over TLS or SSH, never plaintext telnet. Stubbed
   as `NullTerminalGateway`. See
   [ADR 0004](adr/0004-defer-terminal-gateway.md).
+
+**Destination**
+: A game server InterruptingCow connects a user's world to. Used in preference
+  to "world" when the point is about the *far end* — its policies, its logging,
+  its staff — rather than the user's local configuration of it.
+
+**Shared-IP consequences**
+: Because the daemon is shared, every world connection to a destination
+  originates from one IP address. Destinations that count alts or apply bans by
+  IP therefore treat all of an instance's users as one person: shared alt pools,
+  conflated identities, shared-fate bans. See
+  [Managing worlds](user-guide/worlds.md#before-you-start-everyone-on-this-instance-shares-one-ip-address).
+
+**Forwarded identity**
+: A deferred, advisory mechanism for presenting a per-user, pseudonymous origin
+  payload to a destination — the MU\* analogue of the HTTP `X-Forwarded-For` /
+  `Forwarded` headers — so a destination *may* distinguish individual users of
+  one shared instance. Stubbed as a no-op `IForwardedIdentity`; the wire
+  transport is unspecified. Destinations are under no obligation to honour it.
+  See [ADR 0008](adr/0008-forwarded-user-identity.md).
 
 **Protocol package**
 : `packages/protocol` — the shared zod schemas and inferred TypeScript types that

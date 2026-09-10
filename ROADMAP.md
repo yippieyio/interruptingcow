@@ -95,6 +95,12 @@ already exist for all of them.
   TLS with token auth, or an embedded SSH server with registered public keys.
   Deliberately deferred; plaintext telnet in is a non-starter
   ([ADR 0004](docs/adr/0004-defer-terminal-gateway.md)).
+- **Forwarded per-user identity to destinations.** A courtesy mechanism letting a
+  destination tell individual users of one shared instance apart — the MU\*
+  analogue of `X-Forwarded-For` — so per-IP alt limits and bans aren't applied to
+  a whole instance collectively. Privacy-preserving by default; the wire
+  transport needs its own investigation and likely destination-author buy-in
+  ([ADR 0008](docs/adr/0008-forwarded-user-identity.md)).
 - **Richer MU\* protocols.** MCCP2 compression, GMCP, MXP, MSSP — for structured
   data and nicer rendering.
 - **Optional TOTP two-factor authentication.**
